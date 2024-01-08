@@ -31,15 +31,23 @@ dependencies:
   flutter:
     sdk: flutter
   animate_do: ^3.0.2
-  google_fonts: ^5.1.0
+  google_fonts: ^6.1.0
   flutter_animate: ^4.2.0+1
   spring: ^2.0.2
   image_card: ^0.0.4
-  getwidget: ^2.0.4
+  getwidget: ^4.0.0
+  flutter_timer_countdown: ^1.0.5
+  url_launcher: ^6.1.14
+  firebase_core: ^2.14.0
+  firebase_auth: ^4.2.0
+  cloud_firestore: ^4.2.0
+  awesome_dialog: ^3.1.0
+  firebase_core_web: ^2.8.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:
@@ -66,7 +74,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/Images/firstImage.webp
     - lib/Images/cellphone-g2cf4e9d92_1280.png
     - lib/Images/money-gb0e0ed625_1280.png
     - lib/Images/androidLogo.png
@@ -78,19 +85,28 @@ flutter:
     - lib/Images/CITex_noBack.png
     - lib/Images/CITex_Static.png
     - lib/Images/CITex_wBack.png
-    - lib/Images/computer-overlay.jpg
-    - lib/Images/imac-1999636_1920.png
+
 
     - lib/Images/phone.png
-    - lib/Images/unknown.png
-    - lib/Images/firstImage.png
+
     - lib/Images/phone1.png
     - lib/Images/smartphone-4076145_1280.png
     - lib/Images/meeting-room-1806702_1280.jpg
     - lib/Images/Zoom_(1).png
+    - lib/Images/37_Sunset_Broadway_Bridge_and_Little_Rock_Skyline.jpg
 
-    - web/favicon.png
-
+    #- web/favicon.png
+    - lib/Images/contract.jpg
+    - lib/Images/money-256315_1280.jpg
+    - lib/Images/man-4365597_1280.png
+    - lib/Images/smartphone-1833950_1280.png
+    - lib/Images/man-1352025_1280.png
+    - lib/Images/google-chrome-1326908_1280.png
+    - lib/Images/internet-1881760_1280.png
+    - lib/Images/safari-icon-01.png
+    - lib/Images/parcel-575623_1280.png
+    - lib/Images/postal-32383_1280.png
+    -
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

@@ -1,13 +1,63 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:animate_do/animate_do.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:project_citex/route/pageNotifier.dart';
+import 'package:project_citex/route/routeDelegator.dart';
+import 'package:project_citex/route/routeInfoParser.dart';
+import 'package:provider/provider.dart';
+import 'CustomObjects/Website Stats.dart';
 import 'FullScreen.dart';
 import 'SmallScreen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
+void main() async{
+ // setUrlStrategy(PathUrlStrategy());
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
-  runApp(const MyApp());
+  Firebase.initializeApp();
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyBQ7ZxZqlH4svgtyMOBakSUWTo1urptU0c",
+          authDomain: "citex-website.firebaseapp.com",
+          projectId: "citex-website",
+          storageBucket: "citex-website.appspot.com",
+          messagingSenderId: "663276517249",
+          appId: "1:663276517249:web:2639421ae14f8652b51a80",
+          measurementId: "G-4NN0QQBKR3"));
+
+  runApp( NewApp());
 }
+
+class NewApp extends StatelessWidget {
+
+  //Future<FirebaseApp> initialization;
+   NewApp({Key? key, }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider<PageNotifier>(create: (context)=> PageNotifier())
+        ],
+        child:
+
+        // FutureBuilder(
+        //     future: initialization,
+        //     builder: (context, snapshot){
+        //       if(snapshot.hasError){
+        //         print(snapshot.error);
+        //       }
+              //if(snapshot.connectionState == ConnectionState.done){
+                 const MyApp()
+             // }
+           //   return const CircularProgressIndicator();
+           // },
+           // )
+    );
+  }
+}
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -15,9 +65,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+
+    return MaterialApp.router(
       title: 'CITex',
       debugShowCheckedModeBanner: false,
+      routeInformationParser: AppRouteInformationParser(),
+      routerDelegate: AppRouterDelegate(
+        notifier: Provider.of<PageNotifier>(context)
+      ),
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -30,234 +85,78 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.grey,
         primaryColor: Colors.white,
+        popupMenuTheme: const PopupMenuThemeData(
+          color: Colors.grey
+        )
 
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key});
 
-  final String title;
+
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool launchAnimation = false;
-  String longParagraph =
-      'Lorem ipsum rsus, sit amet scelerisque ligula bibendum. Suspendisse jsus tortor blandit eget. Mo et malesuada fames ac ante ipsum primis in faucibus';
-  String shortParagraph =
-      'Lorem ipsum rsus, sit amet scelerisque ligula bibendum. Suspendisse justo mi, eleifend ut tortor eget, semper tristique massa. Sed gravida c';
+
+  late bool webLive;
+
+  WebsiteStats websiteStats = WebsiteStats(isLive: false, status: 'off');
 
   @override
   void initState() {
     super.initState();
 
-    launchAnimation = true;
+    setUp();
+  }
+
+  //final docRef = FirebaseFirestore.instance.collection('websiteStats').doc('123456').withConverter(fromFirestore: WebsiteStats.fromFireStore, toFirestore: (WebsiteStats websiteState, _) => websiteState.toFireStore());
+
+  Future <void>setUp() async {
+    final docRef = FirebaseFirestore.instance.collection('websiteStats').doc('123456').withConverter(fromFirestore: WebsiteStats.fromFireStore, toFirestore: (WebsiteStats websiteState, _) => websiteState.toFireStore());
+
+    final docSnap = await docRef.get();
+    websiteStats = docSnap.data()!;
+
+    //print('webstates: ${websiteStats.status}');
   }
 
 
   Widget getW(w){
+
     if (w>=1050){
-      return  FullScreen();
+      return  const FullScreen();
     }else{
-      return SmallScreen();
+      return SmallScreen(
+websiteStats: websiteStats,
+      );
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return getW(MediaQuery.of(context).size.width);
+    //   FutureBuilder(
+    //   future: setUp(),
+    //     initialData: const CircularProgressIndicator(),
+    //     builder: (BuildContext context, AsyncSnapshot text){
+    //      if(text.connectionState == ConnectionState.done){
+    //        return getW(MediaQuery.of(context).size.width);
+    //      }
+    //      else if(text.connectionState == ConnectionState.waiting){
+    //        return const CircularProgressIndicator();
+    //      }
+    //      return const CircularProgressIndicator();
+    //     }
+    //
+    // );
+      //getW(MediaQuery.of(context).size.width);
   }
 
-
-
-  Widget firstContainer(){
-    return Container(
-      height: MediaQuery.of(context).size.height/2,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.topRight,
-              colors: [Color(0xffE3CB9A), Color(0xffE4CB9C),Color(0xffab5a4b),Color(0xffab5a4b), Color(0xffab5a4b)]
-          )
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(left: 48, right: 48),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height/6,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                end: Alignment.topRight,
-                  colors: [Color(0xffE3CB9A), Color(0xffE4CB9C),Color(0xffccb68d), Color(0xffab5a4b)]
-                )
-                  //color: Color(0xffE3CB9A)
-              ),
-              child: Flexible(
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                    'We Chase Innovations so that you don\'t have to!',
-                    style: GoogleFonts.poppins(
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xff211F39),fontSize: 54,
-                        )
-                    ),
-                    textAlign: TextAlign.center,),
-                ),
-              ),
-
-            ),
-
-                Container(
-                  height: MediaQuery.of(context).size.height/3,
-                  //width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: Color(0xff211F39),
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-
-                      Flexible(child: Column(
-                        children: [
-                          Flexible(
-                              child: Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Text(
-                                  'Guaranteed Most Affordable Software in the Area While still Maintaining a Quality Product',
-                                  style: GoogleFonts.paytoneOne(textStyle: TextStyle(
-                                      fontSize: 36,color: Color(0xffE3CB9A)
-                                  )),
-                                  textAlign: TextAlign.center,
-                                ),
-                              )
-                          ),
-
-                          Flexible(child: Text(shortParagraph,textAlign: TextAlign.center,style: TextStyle(
-                            fontSize: 24
-                          ),))
-                        ],
-                      ),),
-                      Container(
-                        child: Image.asset('lib/Images/favicon.png',),
-                      )
-
-                    ],
-                  )
-                ),
-          ],
-        ),
-      )
-    );
-
-
-
-
-  }
-
-  Widget secondContainer(){
-    return Container(
-      height: MediaQuery.of(context).size.height/2,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.topRight,
-              colors: [Color(0xffE3CB9A), Color(0xffE4CB9C),Color(0xffab5a4b), Color(0xffab5a4b)]
-          )
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(left: 48, right: 48),
-        child: Container(
-          height: MediaQuery.of(context).size.height/2,
-          decoration: BoxDecoration(
-              color: Color(0xff211F39),
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20))
-          ),
-        ),
-      ),
-
-    );
-  }
-
-  Widget secondText() {
-    return Flexible(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(16),
-          child: Text(
-            "This is a Paragraph Title",
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 30),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(8),
-          child: Text(shortParagraph,
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              softWrap: true,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.fade),
-        )
-      ],
-    ));
-  }
-
-  Widget mainText() {
-    return Flexible(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(16),
-          child: Text(
-            "This is a Paragraph Title",
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(8),
-          child: Text(
-            longParagraph,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            softWrap: true,
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.fade,
-          ),
-        )
-      ],
-    ));
-  }
-
-  roundButton(String buttonText) {
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: ElevatedButton(
-        onPressed: () => {},
-        child: Text(buttonText),
-        style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-            )),
-            backgroundColor: MaterialStateProperty.all(Color(0xffE3CB9A))),
-      ),
-    );
-  }
 }
