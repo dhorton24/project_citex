@@ -187,12 +187,15 @@ class _SmallScreenState extends State<SmallScreen> {
                             ),
                         child: Column(
                           children: [
-                            header(),
-                            firstContainer(),
+
+                          //  header(),
+                            stackedContainers(context),
+                            //firstContainer(),
                             osContainer(),
                             secondContainer(),
                             thirdContainer(),
-                            fourthContainer()
+                            fourthContainer(),
+                            barTab()
                           ],
                         ),
                       ),
@@ -215,7 +218,7 @@ class _SmallScreenState extends State<SmallScreen> {
 
     return Container(
       height: 120,
-      color: colors.constantBlue,
+      color: Colors.transparent,
       // decoration: BoxDecoration(
       //     gradient: LinearGradient(
       //         begin: Alignment.topLeft,
@@ -315,6 +318,160 @@ class _SmallScreenState extends State<SmallScreen> {
     );
   }
 
+
+  Widget stackedContainers(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      fit: StackFit.passthrough,
+      children: [
+        firstContainer(context),
+
+        //rectangle box
+        Positioned(
+          top: 420,
+          //width: MediaQuery.of(context).size.width,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 36.0, left: 36),
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width-60,
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey, spreadRadius: 3, blurRadius: 3),
+                  ],
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+
+                    children: [
+
+                      Container(
+                        height: 140,
+                        child: GestureDetector(
+                          onLongPress: () { //have website locked
+                            FirebaseFirestore.instance
+                                .collection('websiteStats')
+                                .doc('123456')
+                                .update({'isLive': false}).then((value) => {
+                              setState(() {
+                                websiteStats.isLive = false;
+                              })
+                            });
+                          },
+                          child: Image.asset('lib/Images/CITex_noBack.png'),
+                        ),
+                      ),
+
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 0.0, left: 8),
+                          child: Container(
+                            // color: Colors.red,
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Dream it, Chase it, Own it",
+                                  style: GoogleFonts.permanentMarker(
+                                    textStyle: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 28),
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Flexible(
+                                  child: Text(
+                                      "The goal of CITex is to bring aspiring entrepreneurs, small business owners, and other organizations closer to their dreams through the integration of digital solutions. CITex strives to make the integration process as seamless as possible by collaborating directly with the client from the intake process and well beyond the launch of their solution.",
+                                      style: GoogleFonts.caveat(
+                                          textStyle: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                      // softWrap: true,
+                                      textAlign: TextAlign.center),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+
+
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget firstContainer(BuildContext context) {
+    return Stack(
+      children: [
+        Column(
+          children: [
+            Container(
+              height: 910,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.white,
+              child: Image.asset(
+                'lib/Images/37_Sunset_Broadway_Bridge_and_Little_Rock_Skyline.jpg',
+                fit: BoxFit.fill,
+              ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * .3,
+              color: Colors.grey[300],
+            ),
+          ],
+        ),
+        header()
+      ],
+    );
+  }
+
+  Widget barTab() {
+    return Container(
+      decoration: BoxDecoration(color: Colors.grey[300]),
+      height: MediaQuery.sizeOf(context).height * .1,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          TextButton(
+              onPressed: () {},
+              child: Text(
+                "Privacy Policy",
+                style: TextStyle(
+                    decoration: TextDecoration.underline, color: Colors.black),
+              )),
+          TextButton(
+              onPressed: () {},
+              child: Text(
+                "Privacy Policy",
+                style: TextStyle(
+                    decoration: TextDecoration.underline, color: Colors.black),
+              )),
+          TextButton(
+              onPressed: () {},
+              child: Text(
+                "Privacy Policy",
+                style: TextStyle(
+                    decoration: TextDecoration.underline, color: Colors.black),
+              ))
+        ],
+      ),
+    );
+  }
+
   // Widget option(BuildContext context) {
   //   return Stack(alignment: AlignmentDirectional.topCenter, children: [
   //     Container(
@@ -365,86 +522,71 @@ class _SmallScreenState extends State<SmallScreen> {
   //   ]);
   // }
 
-  Widget firstContainer() {
-    return Container(
-      height: 610,
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [colors.constantLighterBlue, colors.constantBlue])
-          //color: Color(0xffE3CB9A)
-          ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 175,
-                  child: Image.asset('lib/Images/CITex_noBack.png'),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'We Chase Your Innovations So That You Don\'t Have To!',
-                  style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(
-                          color: Color(0xffab5a4b),
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold)),
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'CITex looks out for the smaller players, bringing more affordable software so that small & upcoming businesses can still have funds to allocate elsewhere. We also focus on ensuring each business is apart of the development process and bring that \'family\' feeling to the table.',
-                  style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  )),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: GestureDetector(
-                  onLongPress: () => {
-                    FirebaseFirestore.instance
-                        .collection('websiteStats')
-                        .doc('123456')
-                        .update({'isLive': false}).then((value) => {
-                              setState(() {
-                                websiteStats.isLive = false;
-                              })
-                            })
-                  },
-                  child: SizedBox(
-                    height: 100,
-                    child: Image.asset(
-                      'lib/Images/CITex_Static.png',
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
+
+
+
+  // Widget firstContainer() {
+  //   return Container(
+  //     height: MediaQuery.of(context).size.height/2,
+  //     decoration: BoxDecoration(
+  //         gradient: LinearGradient(
+  //             begin: Alignment.bottomCenter,
+  //             end: Alignment.topCenter,
+  //             colors: [colors.constantLighterBlue, colors.constantBlue])
+  //         //color: Color(0xffE3CB9A)
+  //         ),
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         color: Colors.white
+  //       ),
+  //       child: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           Padding(
+  //             padding: const EdgeInsets.all(8.0),
+  //             child: GestureDetector(
+  //               onLongPress: (){
+  //                 FirebaseFirestore.instance
+  //                     .collection('websiteStats')
+  //                     .doc('123456')
+  //                     .update({'isLive': false}).then((value) => {
+  //                   setState(() {
+  //                     websiteStats.isLive = false;
+  //                   })
+  //                 });
+  //               },
+  //               child: SizedBox(
+  //                 height: 175,
+  //                 child: Image.asset('lib/Images/CITex_noBack.png',fit: BoxFit.fill,),
+  //               ),
+  //             ),
+  //           ),
+  //           Padding(
+  //             padding: const EdgeInsets.all(8.0),
+  //             child: Text(
+  //               "Dream it, Chase it, Own it", style: GoogleFonts.permanentMarker(
+  //               textStyle: const TextStyle(
+  //                   fontWeight: FontWeight.bold,
+  //                   fontSize: 36),)
+  //             ),
+  //           ),
+  //           Padding(
+  //             padding: const EdgeInsets.all(8.0),
+  //             child: Text(
+  //               "The goal of CITex is to bring aspiring entrepreneurs, small business owners, and other organizations closer to their dreams through the integration of digital solutions. CITex strives to make the integration process as seamless as possible by collaborating directly with the client from the intake process and well beyond the launch of their solution.",
+  //               style: GoogleFonts.caveat(
+  //                   textStyle: const TextStyle(
+  //                       fontSize: 18,
+  //                       fontWeight: FontWeight.bold)),
+  //               textAlign: TextAlign.center,
+  //             ),
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget osContainer() {
     return Container(
@@ -468,48 +610,9 @@ class _SmallScreenState extends State<SmallScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                InkWell(
-                  onTap: () => {
-                    setState(() {
-                      showAppleCard = false;
-                      showWebCard = false;
-                      showAndroidCard = true;
-                    })
-                  },
-                  child: showAndroidCard
-                      ? Image.asset('lib/Images/androidLogo.png')
-                          .animate(onPlay: (controller) => controller.repeat())
-                          .blur(delay: 900.ms)
-                      : Image.asset('lib/Images/androidLogo.png'),
-                ),
-                InkWell(
-                  onTap: () => {
-                    setState(() {
-                      showWebCard = false;
-                      showAndroidCard = false;
-                      showAppleCard = true;
-                    })
-                  },
-                  child: showAppleCard
-                      ? Image.asset('lib/Images/appleLogo.png')
-                          .animate(onPlay: (controller) => controller.repeat())
-                          .blur(delay: 900.ms)
-                      : Image.asset('lib/Images/appleLogo.png'),
-                ),
-                InkWell(
-                  onTap: () => {
-                    setState(() {
-                      showAppleCard = false;
-                      showAndroidCard = false;
-                      showWebCard = true;
-                    })
-                  },
-                  child: showWebCard
-                      ? Image.asset('lib/Images/internetLog.png')
-                          .animate(onPlay: (controller) => controller.repeat())
-                          .blur(delay: 900.ms)
-                      : Image.asset('lib/Images/internetLog.png'),
-                )
+                 Image.asset('lib/Images/androidLogo.png'),
+                 Image.asset('lib/Images/appleLogo.png'),
+                 Image.asset('lib/Images/internetLog.png')
               ],
             ),
           ),

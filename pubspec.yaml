@@ -93,7 +93,9 @@ flutter:
     - lib/Images/smartphone-4076145_1280.png
     - lib/Images/meeting-room-1806702_1280.jpg
     - lib/Images/Zoom_(1).png
+    - lib/Images/CITex.png
     - lib/Images/37_Sunset_Broadway_Bridge_and_Little_Rock_Skyline.jpg
+    - lib/Images/CITex_noBack.png
 
     #- web/favicon.png
     - lib/Images/contract.jpg
@@ -106,7 +108,7 @@ flutter:
     - lib/Images/safari-icon-01.png
     - lib/Images/parcel-575623_1280.png
     - lib/Images/postal-32383_1280.png
-    -
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
